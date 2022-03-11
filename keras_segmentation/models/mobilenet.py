@@ -65,9 +65,8 @@ def get_mobilenet_encoder(input_height=224, input_width=224,
             'channels_last'), "Currently only channels last mode is supported"
     assert (IMAGE_ORDERING ==
             'channels_last'), "Currently only channels last mode is supported"
-
-    assert input_height % 32 == 0
-    assert input_width % 32 == 0
+    assert input_height % 32 == 0 
+    assert input_width % 32 == 0 
 
     alpha = 1.0
     depth_multiplier = 1

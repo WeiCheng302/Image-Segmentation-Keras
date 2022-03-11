@@ -22,11 +22,11 @@ def model_from_checkpoint_path(checkpoints_path):
 
     from .models.all_models import model_from_name
     assert (os.path.isfile(checkpoints_path+"_config.json")
-            ), "Checkpoint not found."
+            ), "Checkpoint not found.(no such file)"
     model_config = json.loads(
         open(checkpoints_path+"_config.json", "r").read())
     latest_weights = find_latest_checkpoint(checkpoints_path)
-    assert (latest_weights is not None), "Checkpoint not found."
+    assert (latest_weights is not None), "Checkpoint not found.(no latest weight)"
     model = model_from_name[model_config['model_class']](
         model_config['n_classes'], input_height=model_config['input_height'],
         input_width=model_config['input_width'])

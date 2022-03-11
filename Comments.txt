@@ -1,0 +1,23 @@
+#Verify Dataset
+
+python -m keras_segmentation verify_dataset --images_path="dataset_path/images_prepped_train/" --segs_path="dataset_path/annotations_prepped_train/" --n_classes=50
+
+#Visualize Dataset
+
+python -m keras_segmentation visualize_dataset --images_path="dataset_path/images_prepped_train/" --segs_path="dataset_path/annotations_prepped_train/" --n_classes=50
+
+#Train
+
+python -m keras_segmentation train --checkpoints_path="dataset_path/CheckPoints/" --train_images="D:\Point2IMG\Original_Img\Test_IMG\" --train_annotations="D:\Point2IMG\Original_Img\Test_Label\" --val_images="D:\Point2IMG\Original_Img\Test_IMG\" --val_annotations="D:\Point2IMG\Original_Img\Test_Label\" --n_classes=50 --input_height=128 --input_width=128 --model_name="vgg_unet"
+
+#Predict
+
+python -m keras_segmentation predict --checkpoints_path="dataset_path/CheckPoints/" --input_path="dataset1/images_prepped_test/" --output_path="path_to_predictions"
+
+#get predictions of a video
+
+python -m keras_segmentation predict_video --checkpoints_path="dataset_path/CheckPoints/" --input="path_to_video" --output_file="path_for_save_inferenced_video" --display
+
+#Evaluation
+
+python -m keras_segmentation evaluate_model --checkpoints_path="Output/" --images_path="D:\image-segmentation-keras\Data\Test_Img" --segs_path="D:\image-segmentation-keras\Data\Test_Label"

@@ -1,6 +1,7 @@
 data/
-
-
+DefaultData/
+logs/
+Output/
 
 sync.expect
 

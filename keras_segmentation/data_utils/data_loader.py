@@ -4,6 +4,7 @@ import random
 import six
 import numpy as np
 import cv2
+import tifffile
 
 try:
     from collections.abc import Sequence
@@ -20,7 +21,7 @@ except ImportError:
 
 
 from ..models.config import IMAGE_ORDERING
-from .augmentation import augment_seg, custom_augment_seg
+from ..data_utils.augmentation import augment_seg, custom_augment_seg
 
 DATA_LOADER_SEED = 0
 
@@ -29,7 +30,7 @@ class_colors = [(random.randint(0, 255), random.randint(
     0, 255), random.randint(0, 255)) for _ in range(5000)]
 
 
-ACCEPTABLE_IMAGE_FORMATS = [".jpg", ".jpeg", ".png", ".bmp"]
+ACCEPTABLE_IMAGE_FORMATS = [".jpg", ".jpeg", ".png", ".bmp", ".tif"]
 ACCEPTABLE_SEGMENTATION_FORMATS = [".png", ".bmp"]
 
 
@@ -57,7 +58,6 @@ def get_pairs_from_paths(images_path, segs_path, ignore_non_matching=False, othe
 
     image_files = []
     segmentation_files = {}
-
     for dir_entry in os.listdir(images_path):
         if os.path.isfile(os.path.join(images_path, dir_entry)) and \
                 os.path.splitext(dir_entry)[1] in ACCEPTABLE_IMAGE_FORMATS:
@@ -133,7 +133,6 @@ def get_image_array(image_input,
                     width, height,
                     imgNorm="sub_mean", ordering='channels_first', read_image_type=1):
     """ Load image array from input """
-
     if type(image_input) is np.ndarray:
         # It is already an array, use it as it is
         img = image_input
@@ -141,7 +140,11 @@ def get_image_array(image_input,
         if not os.path.isfile(image_input):
             raise DataLoaderError("get_image_array: path {0} doesn't exist"
                                   .format(image_input))
-        img = cv2.imread(image_input, read_image_type)
+        if os.path.splitext(image_input)[1] is ".tif":
+            img = tifffile.imread(image_input)
+        else:
+            img = cv2.imread(image_input, read_image_type)
+            #print("IMG")
     else:
         raise DataLoaderError("get_image_array: Can't process input type {0}"
                               .format(str(type(image_input))))
@@ -212,7 +215,10 @@ def verify_segmentation_dataset(images_path, segs_path,
 
         return_value = True
         for im_fn, seg_fn in tqdm(img_seg_pairs):
-            img = cv2.imread(im_fn)
+            if os.path.splitext(im_fn)[1] == ".tif":
+                img = tifffile.imread(im_fn)
+            else:
+                img = cv2.imread(im_fn)
             seg = cv2.imread(seg_fn)
             # Check dimensions match
             if not img.shape == seg.shape:
@@ -275,8 +281,11 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
                     im, seg = next(zipped)
                     seg = cv2.imread(seg, 1)
 
-                im = cv2.imread(im, read_image_type)
-                
+                if os.path.splitext(im)[1] == ".tif":
+                    im = tifffile.imread(im)
+                    #print("TIF")
+                else:
+                    im = cv2.imread(im, read_image_type)
 
                 if do_augment:
 
@@ -300,7 +309,11 @@ def image_segmentation_generator(images_path, segs_path, batch_size,
 
                 im, seg, others = next(zipped)
 
-                im = cv2.imread(im, read_image_type)
+                #im = cv2.imread(im, read_image_type)
+                if os.path.splitext(im)[1] is ".tif":
+                    im = tifffile.imread(im)
+                else:
+                    im = cv2.imread(im, read_image_type)
                 seg = cv2.imread(seg, 1)
 
                 oth = []
