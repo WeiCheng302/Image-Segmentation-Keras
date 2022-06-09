@@ -10,11 +10,16 @@
 
 Implementation of various Deep Image Segmentation models in keras.
 
-Link to the full blog post with tutorial : https://divamgupta.com/image-segmentation/2019/06/06/deep-learning-semantic-segmentation-keras.html
+### News : Functionality of this repository will be soon integrated with https://liner.ai . Check it out! 
+
+
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/sunshineatnoon/Paper-Collection/master/images/FCN1.png" width="50%" >
 </p>
+
+Link to the full blog post with tutorial : https://divamgupta.com/image-segmentation/2019/06/06/deep-learning-semantic-segmentation-keras.html
+
 
 ## Working Google Colab Examples:
 * Python Interface: https://colab.research.google.com/drive/1q_eCYEzKxixpCKH1YDsLnsvgxl92ORcv?usp=sharing
@@ -402,7 +407,7 @@ The following example shows how to set custom callbacks for the model training.
 ```python
 
 from keras_segmentation.models.unet import vgg_unet
-from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
+from keras.callbacks import ModelCheckpoint, EarlyStopping
 
 model = vgg_unet(n_classes=51 ,  input_height=416, input_width=608 )
 
@@ -486,6 +491,8 @@ Here are a few projects which are using our library :
 * https://github.com/Alpha-Monocerotis/PDF_FigureTable_Extraction
 * https://github.com/rusito-23/mobile_unet_segmentation
 * https://github.com/Philliec459/ThinSection-image-segmentation-keras
+* https://github.com/imsadia/cv-assignment-three.git
+* https://github.com/kejitan/ESVGscale
 
 If you use our code in a publicly available project, please add the link here ( by posting an issue or creating a PR )
 
